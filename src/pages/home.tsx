@@ -3,6 +3,8 @@ import { USVBoat } from "../classes/usv-boat";
 import { ENDirection, TPosition } from "../constants/enums";
 
 const Home = () => {
+    const areaWidth = 5;
+    const areaHeight = 5;
     const [auxMovement, setAuxMovement] = useState<TPosition>({ x: 0, y: 0, direction: ENDirection.WEST });
     const boatRef = useRef(new USVBoat());
     const [position, setPosition] = useState<TPosition>({ x: 0, y: 0, direction: ENDirection.WEST });
@@ -14,6 +16,24 @@ const Home = () => {
         setPosition(auxMovement);
 
     }
+    const sail = () => {
+        setPosition(prev => {
+            const { x, y, direction } = prev;
+
+            switch (direction) {
+                case ENDirection.NORTH:
+                    return { ...prev, y: Math.max(0, y - 1) };
+                case ENDirection.EAST:
+                    return { ...prev, x: Math.min(100, x + 1) };
+                case ENDirection.SOUTH:
+                    return { ...prev, y: Math.min(100, y + 1) };
+                case ENDirection.WEST:
+                    return { ...prev, x: Math.max(0, x - 1) };
+                default:
+                    return prev;
+            }
+        });
+    };
     const boatDirection = (): any => {
         const direction: ENDirection = position.direction;
         switch (direction) {
@@ -47,52 +67,69 @@ const Home = () => {
         <div>
             <h1 className="title">USV Drone Boat Simulator</h1>
             <div className="main-wrapper grid-19-20">
-                <div className="command-section">
-                    <div className="command-depart">
-                        <div className="input-wrapper">
-                            <div className="input-label">X</div>
-                            <input
-                                className="input-class"
-                                type="text"
-                                name="x"
-                                value={auxMovement.x}
-                                onChange={handleInputChange}
-                            />
-                        </div>
-                        <div className="input-wrapper">
-                            <div className="input-label">Y</div>
-                            <input
-                                className="input-class"
-                                type="text"
-                                name="y"
-                                value={auxMovement.y}
-                                onChange={handleInputChange}
-                            />
-                        </div>
-                        <div className="input-wrapper">
-                            <div className="input-label">Direction</div>
-                            <select
-                                className="input-class"
-                                name="direction"
-                                id="direction"
-                                value={auxMovement.direction}
-                                onChange={handleDirectionChange}
+                <div className="command-section" style={{
+                    width: areaWidth * 5 + 'rem',
+                    height: areaHeight * 5 + 'rem'
+                }}>
+                    <div className="" style={{ padding: '1rem' }}>
+                        <div className="command-depart">
+                            <div className="input-wrapper">
+                                <div className="input-label">X</div>
+                                <input
+                                    className="input-class"
+                                    type="text"
+                                    name="x"
+                                    value={auxMovement.x}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                            <div className="input-wrapper">
+                                <div className="input-label">Y</div>
+                                <input
+                                    className="input-class"
+                                    type="text"
+                                    name="y"
+                                    value={auxMovement.y}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                            <div className="input-wrapper">
+                                <div className="input-label">Direction</div>
+                                <select
+                                    className="input-class"
+                                    name="direction"
+                                    id="direction"
+                                    value={auxMovement.direction}
+                                    onChange={handleDirectionChange}
+                                >
+                                    <option value={ENDirection.NORTH}>{ENDirection.NORTH}</option>
+                                    <option value={ENDirection.WEST}>{ENDirection.WEST}</option>
+                                    <option value={ENDirection.SOUTH}>{ENDirection.SOUTH}</option>
+                                    <option value={ENDirection.EAST}>{ENDirection.EAST}</option>
+                                </select>
+                            </div>
+                            <button
+                                onClick={executeCommand}
                             >
-                                <option value={ENDirection.NORTH}>{ENDirection.NORTH}</option>
-                                <option value={ENDirection.WEST}>{ENDirection.WEST}</option>
-                                <option value={ENDirection.SOUTH}>{ENDirection.SOUTH}</option>
-                                <option value={ENDirection.EAST}>{ENDirection.EAST}</option>
-                            </select>
+                                execute
+                            </button>
                         </div>
                         <button
-                            onClick={executeCommand}
+                            onClick={sail}
                         >
-                            execute
+                            sail
                         </button>
-                    </div>
 
+                    </div >
                 </div >
-                <div className="area-box">
+                <div
+                    className="area-box"
+                    style={{
+                        width: areaWidth * 5 + 'rem',
+                        height: areaHeight * 5 + 'rem'
+
+                    }}
+                >
                     <div
                         className='the-boat'
                         style={{
