@@ -1,5 +1,6 @@
+import { TPosition } from './../constants/enums';
 import { toast } from "react-toastify";
-import { ENDirection, ENNaming, TPosition } from "../constants/enums";
+import { ENDirection, ENNaming } from "../constants/enums";
 import { UtilsStatic } from "../services/utils";
 
 export class USVBoat {
@@ -7,25 +8,21 @@ export class USVBoat {
     private readonly areaHeight = 5;
     private hasDeparted: boolean = false;
     private position: TPosition | null = null;
-    private originPlace = { x: 0, y: 0, direction: ENDirection.WEST }
+    private originPlace = { x: 2, y: 2, direction: ENDirection.EAST }
 
-    private hasWithinArea(x: number, y: number): boolean {
-        return x < this.areaWidth && y < this.areaHeight
+    private hasWithinArea(position: TPosition): boolean {
+        return position.x < this.areaWidth && position.y < this.areaHeight
     }
-    public depart(x: number, y: number, f: ENDirection) {
-        if (!UtilsStatic.isNull(this.position) && this.hasWithinArea(x, y)) {
-            return { x, y, f }
+    public depart(position: TPosition) {
+        if (!UtilsStatic.isNull(this.position) && this.hasWithinArea(position)) {
+            return { position }
         }
     }
     public sail() { }
     public port() { }
     public starBoard() { }
     public status() {
-        return this.originPlace;
-        //     x: this.position.x,
-        //     y: this.position.y,
-        //     f: this.position.direction
-        // }
+        return this.originPlace;       
     }
 
     // DEPART X,Y, F
