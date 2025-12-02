@@ -16,6 +16,23 @@ const Home = () => {
         setPosition(auxMovement);
 
     }
+    const port = () => {
+        setPosition(prev => {
+            const { x, y, direction } = prev;
+            switch (direction) {
+                case ENDirection.NORTH:
+                    return { ...prev, direction: ENDirection.WEST };
+                case ENDirection.EAST:
+                    return { ...prev, direction: ENDirection.NORTH };
+                case ENDirection.SOUTH:
+                    return { ...prev, direction: ENDirection.EAST };
+                case ENDirection.WEST:
+                    return { ...prev, direction: ENDirection.SOUTH };
+                default:
+                    return prev;
+            }
+        })
+    }
     const sail = () => {
         setPosition(prev => {
             const { x, y, direction } = prev;
@@ -118,6 +135,11 @@ const Home = () => {
                             onClick={sail}
                         >
                             sail
+                        </button>
+                        <button
+                            onClick={port}
+                        >
+                            port
                         </button>
 
                     </div >
