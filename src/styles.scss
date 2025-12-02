@@ -1,0 +1,16 @@
+.area-box {
+    position: relative;
+    width: 30vw;
+    height: 30vw;
+    background: lightgray;
+    border-radius: 10px;
+
+}
+
+.the-boat {
+    position: absolute;
+    background: blueviolet;
+    inset: 0;
+    width: 1rem;
+    height: 1rem;
+}

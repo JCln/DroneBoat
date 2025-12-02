@@ -1,0 +1,16 @@
+export enum ENNaming {
+    globalErrorUnExpected = 'globalErrorUnExpected',
+    globalErrorAsync = 'globalErrorAsync',
+    boatIsStillInHarbour = 'Boat is in harbour!'
+}
+export enum ENDirection {
+    NORTH = 'NORTH',
+    SOUTH = 'SOUTH',
+    EAST = 'EAST',
+    WEST = 'WEST'
+}
+export type TPosition = {
+    x: number;
+    y: number;
+    direction: ENDirection;
+}

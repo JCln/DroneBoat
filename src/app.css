@@ -1,0 +1,214 @@
+@import './styles.scss';
+/* @import '../node_modules/spin.js/spin.css'; */
+/*
+320px — 480px: Mobile devices.
+481px — 768px: iPads, Tablets.
+769px — 1024px: Small screens, laptops.
+1025px — 1200px: Desktops, large screens.
+1201px and more — Extra large screens, TV.
+*/
+
+
+:root {
+  --font-family: "Arial";
+
+  --color-offwhite: #f9fafb;
+  --color-white: #FFFFFF;
+  --color-base-0: #E7ECFB;
+  --color-1: #C5C5CF4D;
+  --color-2: #3989F9;
+  --color-2-5: #3F6EE5;
+  --color-3: #5276DA;
+  --color-4: #01095F;
+  --color-5: #021A3B;
+  --color-6: #345ED4;
+  --color-7: #0A47A3;
+  --color-8: #4C74D9;
+  --color-9: #87A0E8;
+  --color-10: #E1F5FE;
+  --color-11: #88b2f7;
+  --color-gray-3: #F5F7FA;
+  --color-gray-5: #A2A6B0;
+  --color-gray-6: #666666;
+  --color-gray-8: #333;
+  --color-lightgray-1: #E7E7E7;
+  --color-lightgray-2: #e1e1e1;
+  --color-lightgray: #E0E0E0;
+  --color-gray: #7d7d7d;
+  --color-light-gray: #DADDE833;
+  --color-tab-disable: #DDE1EE;
+
+  --line-height1: 1;
+  --line-height1-2: 1.2;
+  --line-height1-5: 1.5;
+  --line-height1-8: 1.8;
+  --line-height2: 2;
+
+  --border-2px: 2px;
+  --border-5px: 5px;
+  --border-7px: 7px;
+  --border-10px: 10px;
+  --border-15px: 15px;
+  --border-20px: 20px;
+  --border-80px: 80px;
+  --border-100vmax: 100vmax;
+  --border-50: 50%;
+
+  --size-0-3px: 0.3px;
+  --size-1px: 1px;
+  --size-2px: 2px;
+  --size-3px: 3px;
+  --size-4px: 4px;
+  --size-5px: 5px;
+  --size-8px: 8px;
+  --size-05rem: 0.5rem;
+  --size-10px: 10px;
+  --size-12px: 12px;
+  --size-14px: 14px;
+  --size-1rem: 1rem;
+  --size-1-2rem: 1.2rem;
+  --size-1-3rem: 1.3rem;
+  --size-1-4rem: 1.4rem;
+  --size-1-5rem: 1.5rem;
+  --size-1-6rem: 1.6rem;
+  --size-2rem: 2rem;
+  --size-2-5rem: 2.5rem;
+  --size-2-8rem: 2.8rem;
+  --size-3rem: 3rem;
+  --size-4rem: 4rem;
+  --size-7rem: 7rem;
+  --size-8rem: 8rem;
+  --size-10rem: 10rem;
+  --size-12rem: 12rem;
+  --size-13rem: 13rem;
+  --size-14rem: 14rem;
+  --size-15rem: 15rem;
+  --size-16rem: 16rem;
+
+  --header-height: 3.5rem;
+
+  /*========== Font weight ==========*/
+  --font-medium: 500;
+  --font-semi-bold: 600;
+
+  /*========== z index ==========*/
+  --z-fixed: 100;
+}
+
+html,
+body {
+  position: relative;
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  min-height: 100%;
+  background: var(--color-white);
+}
+
+.grid-3-4 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(3rem, 4rem));
+}
+
+.grid-4-5 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(4rem, 5rem));
+}
+
+.grid-5-6 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(5rem, 6rem));
+}
+
+.grid-6-7 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(6rem, 7rem));
+}
+
+.grid-7-8 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(7rem, 8rem));
+}
+
+.grid-8-9 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 9rem));
+}
+
+.grid-9-10 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 10rem));
+}
+
+.grid-10-11 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 11rem));
+}
+
+.grid-12-13 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--size-12rem), var(--size-13rem)));
+}
+
+.grid-12-15 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--size-12rem), var(--size-15rem)));
+}
+
+.grid-10-13 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--size-10rem), var(--size-13rem)));
+}
+
+.grid-11-12 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 12rem));
+}
+
+.grid-14-15 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--size-14rem), var(--size-15rem)));
+}
+
+.grid-15-16 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--size-15rem), var(--size-16rem)));
+}
+
+.grid-16-17 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 17rem));
+}
+
+.grid-19-20 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(19rem, 20rem));
+}
+
+.grid-20-21 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 21rem));
+}
+
+.grid-20-24 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 24rem));
+}
+
+.grid-20-1fr {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
