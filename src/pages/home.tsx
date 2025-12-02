@@ -3,15 +3,16 @@ import { USVBoat } from "../classes/usv-boat";
 import { ENDirection, TPosition } from "../constants/enums";
 
 const Home = () => {
-    const [movement, setMovement] = useState<any>()
+    const [auxMovement, setAuxMovement] = useState<TPosition>({ x: 0, y: 0, direction: ENDirection.WEST });
     const boatRef = useRef(new USVBoat());
     const [position, setPosition] = useState<TPosition>({ x: 0, y: 0, direction: ENDirection.WEST });
 
     const executeCommand = () => {
-        console.log('Selected Direction:', position);
-        const temp = boatRef.current.depart(position);
-        console.log(temp);
-        
+        // console.log('Selected Direction:', position);
+        // const temp = boatRef.current.depart(position);
+        // console.log(temp);        
+        setPosition(auxMovement);
+
     }
     const boatDirection = (): any => {
         const direction: ENDirection = position.direction;
@@ -31,13 +32,13 @@ const Home = () => {
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
 
-        setPosition(prev => ({
+        setAuxMovement(prev => ({
             ...prev,
             [name]: Number(value)
         }));
     };
     const handleDirectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setPosition(prev => ({
+        setAuxMovement(prev => ({
             ...prev,
             direction: e.target.value as ENDirection
         }));
@@ -54,7 +55,7 @@ const Home = () => {
                                 className="input-class"
                                 type="text"
                                 name="x"
-                                value={position.x}
+                                value={auxMovement.x}
                                 onChange={handleInputChange}
                             />
                         </div>
@@ -64,7 +65,7 @@ const Home = () => {
                                 className="input-class"
                                 type="text"
                                 name="y"
-                                value={position.y}
+                                value={auxMovement.y}
                                 onChange={handleInputChange}
                             />
                         </div>
@@ -74,7 +75,7 @@ const Home = () => {
                                 className="input-class"
                                 name="direction"
                                 id="direction"
-                                value={position.direction}
+                                value={auxMovement.direction}
                                 onChange={handleDirectionChange}
                             >
                                 <option value={ENDirection.NORTH}>{ENDirection.NORTH}</option>
