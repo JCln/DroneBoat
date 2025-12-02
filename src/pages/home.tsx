@@ -33,6 +33,27 @@ const Home = () => {
             }
         })
     }
+    const status = () => {
+        console.log(position);
+
+    }
+    const starBoard = () => {
+        setPosition(prev => {
+            const { x, y, direction } = prev;
+            switch (direction) {
+                case ENDirection.WEST:
+                    return { ...prev, direction: ENDirection.NORTH };
+                case ENDirection.NORTH:
+                    return { ...prev, direction: ENDirection.EAST };
+                case ENDirection.EAST:
+                    return { ...prev, direction: ENDirection.SOUTH };
+                case ENDirection.SOUTH:
+                    return { ...prev, direction: ENDirection.WEST };
+                default:
+                    return prev;
+            }
+        })
+    }
     const sail = () => {
         setPosition(prev => {
             const { x, y, direction } = prev;
@@ -141,7 +162,22 @@ const Home = () => {
                         >
                             port
                         </button>
+                        <button
+                            onClick={starBoard}
+                        >
+                            starBoard
+                        </button>
+                        <button
+                            onClick={status}
+                        >
+                            status
+                        </button>
 
+                        <div className="status-position">
+                            x: {position.x}
+                            y: {position.y}
+                            direction: {position.direction}
+                        </div>
                     </div >
                 </div >
                 <div
