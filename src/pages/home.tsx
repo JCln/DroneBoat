@@ -1,10 +1,16 @@
 import { useRef, useState } from "react";
 import { USVBoat } from "../classes/usv-boat";
-import { ENDirection, TPosition } from "../constants/enums";
+import { ENDirection, ENNaming, TPosition } from "../constants/enums";
+import { toast } from "react-toastify";
 
 const Home = () => {
     const areaWidth = 5;
     const areaHeight = 5;
+    const boatWidth = 1;//rem
+    const boatHeight = 3;//rem
+    const viewWidthSize = (areaWidth * 5) + boatWidth;
+    const viewHeightSize = (areaHeight * 5) + boatHeight;
+    const [hasDeparted, setHasDeparted] = useState<boolean>(false)
     const [auxMovement, setAuxMovement] = useState<TPosition>({ x: 0, y: 0, direction: ENDirection.WEST });
     const boatRef = useRef(new USVBoat());
     const [position, setPosition] = useState<TPosition>({ x: 0, y: 0, direction: ENDirection.WEST });
@@ -15,6 +21,12 @@ const Home = () => {
         // console.log(temp);        
         setPosition(auxMovement);
 
+    }
+    const reset = () => {
+        setPosition(prev => {
+            return { ...prev, x: 0, y: 0, direction: ENDirection.WEST };
+        })        
+        setHasDeparted(false);
     }
     const port = () => {
         setPosition(prev => {
@@ -101,17 +113,61 @@ const Home = () => {
             direction: e.target.value as ENDirection
         }));
     };
+    const handleValidation = (fn: any, item?: any) => {
+        console.log(auxMovement);
+        console.log(position);
+
+        if (!hasDeparted && position.x == 0 && position.y == 0 && position.direction == ENDirection.WEST && item.target.name !== 'depart') {
+            toast.error(ENNaming.boatIsStillInHarbour);
+        }
+        else {
+            if (
+                (
+                    (position.x > -1 && position.x - 1 < viewWidthSize) &&
+                    position.y > -1 && position.y - 1 < viewHeightSize) ||
+                (item.target.name == 'port' || item.target.name == 'starBoard')
+            ) {
+                setHasDeparted(true);
+                return fn();
+            } else {
+                // inserted values were not true
+                toast.error(ENNaming.boatShouldBeInFramework);
+            }
+        }
+    }
+    const handleValidationDepart = (fn: any, item?: any) => {
+        console.log(auxMovement);
+        console.log(position);
+
+        if (!hasDeparted && auxMovement.x == 0 && auxMovement.y == 0 && auxMovement.direction == ENDirection.WEST && item.target.name !== 'depart') {
+            toast.error(ENNaming.boatIsStillInHarbour);
+        }
+        else {
+            if (auxMovement.x > -1 && auxMovement.x - 1 < viewWidthSize &&
+                auxMovement.y > -1 && auxMovement.y - 1 < viewHeightSize
+            ) {
+                setHasDeparted(true);
+                return fn();
+            } else {
+                // inserted values were not true
+                toast.error(ENNaming.boatShouldBeInFramework);
+            }
+        }
+    }
     return (
         <div>
             <h1 className="title">USV Drone Boat Simulator</h1>
             <div className="main-wrapper grid-19-20">
                 <div className="command-section" style={{
-                    minWidth: areaWidth * 5 + 'rem',
-                    minHeight: areaHeight * 5 + 'rem'
+                    minWidth: viewWidthSize + 'vw',
+                    minHeight: viewHeightSize + 'vh'
                 }}>
                     <div className="" style={{ padding: '1rem' }}>
                         <div className="grid gap-8">
                             <div className="a-command-style">
+                                <div>
+                                    <p>Depart from the harbour and move to as position.</p>
+                                </div>
                                 <div className="command-depart">
                                     <div className="input-wrapper">
                                         <div className="input-label">X</div>
@@ -148,41 +204,54 @@ const Home = () => {
                                             <option value={ENDirection.EAST}>{ENDirection.EAST}</option>
                                         </select>
                                     </div>
+                                </div>
+                                <div className="flex gap-4">
                                     <button
-                                        onClick={executeCommand}
+                                        name="depart"
+                                        onClick={(item) => handleValidationDepart(executeCommand, item)}
                                     >
-                                        execute
+                                        Depart
+                                    </button>
+                                    <button
+                                        className="reset-button"
+                                        name="reset"
+                                        onClick={reset}
+                                    >
+                                        Reset
                                     </button>
                                 </div>
                             </div>
                             <div className="a-command-style">
                                 <div>
-                                    <p>Move the boat one meter forward</p>
+                                    <p>Move the boat one meter forward.</p>
                                 </div>
                                 <button
-                                    onClick={sail}
+                                    name="sail"
+                                    onClick={(item) => handleValidation(sail, item)}
                                 >
-                                    sail
+                                    Sail
                                 </button>
                             </div>
                             <div className="a-command-style">
                                 <div>
-                                    <p>rotate the boat 90 degrees to the <strong> Left</strong></p>
+                                    <p>Rotate the boat 90 degrees to the <strong> Left</strong>.</p>
                                 </div>
                                 <button
-                                    onClick={port}
+                                    name='port'
+                                    onClick={(item) => handleValidation(port, item)}
                                 >
-                                    port
+                                    Port
                                 </button>
                             </div>
                             <div className="a-command-style">
                                 <div>
-                                    <p>rotate the boat 90 degrees to the <strong> Right</strong></p>
+                                    <p>Rotate the boat 90 degrees to the <strong> Right</strong>.</p>
                                 </div>
                                 <button
-                                    onClick={starBoard}
+                                    name="starBoard"
+                                    onClick={(item) => handleValidation(starBoard, item)}
                                 >
-                                    starBoard
+                                    StarBoard
                                 </button>
                             </div>
                             {/* <div className="a-command-style">
@@ -202,8 +271,8 @@ const Home = () => {
                     <div
                         className="area-box"
                         style={{
-                            width: areaWidth * 5 + 'rem',
-                            height: areaHeight * 5 + 'rem'
+                            width: viewWidthSize + 'vw',
+                            height: viewHeightSize + 'vh'
 
                         }}
                     >
@@ -235,7 +304,7 @@ const Home = () => {
                     </div>
                 </div>
             </div >
-        </div>
+        </div >
     );
 };
 
