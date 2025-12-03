@@ -106,99 +106,134 @@ const Home = () => {
             <h1 className="title">USV Drone Boat Simulator</h1>
             <div className="main-wrapper grid-19-20">
                 <div className="command-section" style={{
-                    width: areaWidth * 5 + 'rem',
-                    height: areaHeight * 5 + 'rem'
+                    minWidth: areaWidth * 5 + 'rem',
+                    minHeight: areaHeight * 5 + 'rem'
                 }}>
                     <div className="" style={{ padding: '1rem' }}>
-                        <div className="command-depart">
-                            <div className="input-wrapper">
-                                <div className="input-label">X</div>
-                                <input
-                                    className="input-class"
-                                    type="text"
-                                    name="x"
-                                    value={auxMovement.x}
-                                    onChange={handleInputChange}
-                                />
+                        <div className="grid gap-8">
+                            <div className="a-command-style">
+                                <div className="command-depart">
+                                    <div className="input-wrapper">
+                                        <div className="input-label">X</div>
+                                        <input
+                                            className="input-class"
+                                            type="text"
+                                            name="x"
+                                            value={auxMovement.x}
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
+                                    <div className="input-wrapper">
+                                        <div className="input-label">Y</div>
+                                        <input
+                                            className="input-class"
+                                            type="text"
+                                            name="y"
+                                            value={auxMovement.y}
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
+                                    <div className="input-wrapper">
+                                        <div className="input-label">Direction</div>
+                                        <select
+                                            className="input-class"
+                                            name="direction"
+                                            id="direction"
+                                            value={auxMovement.direction}
+                                            onChange={handleDirectionChange}
+                                        >
+                                            <option value={ENDirection.NORTH}>{ENDirection.NORTH}</option>
+                                            <option value={ENDirection.WEST}>{ENDirection.WEST}</option>
+                                            <option value={ENDirection.SOUTH}>{ENDirection.SOUTH}</option>
+                                            <option value={ENDirection.EAST}>{ENDirection.EAST}</option>
+                                        </select>
+                                    </div>
+                                    <button
+                                        onClick={executeCommand}
+                                    >
+                                        execute
+                                    </button>
+                                </div>
                             </div>
-                            <div className="input-wrapper">
-                                <div className="input-label">Y</div>
-                                <input
-                                    className="input-class"
-                                    type="text"
-                                    name="y"
-                                    value={auxMovement.y}
-                                    onChange={handleInputChange}
-                                />
-                            </div>
-                            <div className="input-wrapper">
-                                <div className="input-label">Direction</div>
-                                <select
-                                    className="input-class"
-                                    name="direction"
-                                    id="direction"
-                                    value={auxMovement.direction}
-                                    onChange={handleDirectionChange}
+                            <div className="a-command-style">
+                                <div>
+                                    <p>Move the boat one meter forward</p>
+                                </div>
+                                <button
+                                    onClick={sail}
                                 >
-                                    <option value={ENDirection.NORTH}>{ENDirection.NORTH}</option>
-                                    <option value={ENDirection.WEST}>{ENDirection.WEST}</option>
-                                    <option value={ENDirection.SOUTH}>{ENDirection.SOUTH}</option>
-                                    <option value={ENDirection.EAST}>{ENDirection.EAST}</option>
-                                </select>
+                                    sail
+                                </button>
                             </div>
-                            <button
-                                onClick={executeCommand}
-                            >
-                                execute
-                            </button>
-                        </div>
-                        <button
-                            onClick={sail}
-                        >
-                            sail
-                        </button>
-                        <button
-                            onClick={port}
-                        >
-                            port
-                        </button>
-                        <button
-                            onClick={starBoard}
-                        >
-                            starBoard
-                        </button>
-                        <button
-                            onClick={status}
-                        >
-                            status
-                        </button>
-
-                        <div className="status-position">
-                            x: {position.x}
-                            y: {position.y}
-                            direction: {position.direction}
+                            <div className="a-command-style">
+                                <div>
+                                    <p>rotate the boat 90 degrees to the <strong> Left</strong></p>
+                                </div>
+                                <button
+                                    onClick={port}
+                                >
+                                    port
+                                </button>
+                            </div>
+                            <div className="a-command-style">
+                                <div>
+                                    <p>rotate the boat 90 degrees to the <strong> Right</strong></p>
+                                </div>
+                                <button
+                                    onClick={starBoard}
+                                >
+                                    starBoard
+                                </button>
+                            </div>
+                            {/* <div className="a-command-style">
+                                <div>
+                                    <p>Move the boat one meter forward</p>
+                                </div>
+                                <button
+                                    onClick={status}
+                                >
+                                    status
+                                </button>
+                            </div> */}
                         </div>
                     </div >
                 </div >
-                <div
-                    className="area-box"
-                    style={{
-                        width: areaWidth * 5 + 'rem',
-                        height: areaHeight * 5 + 'rem'
-
-                    }}
-                >
+                <div className="grid">
                     <div
-                        className='the-boat'
+                        className="area-box"
                         style={{
-                            left: `${position.x + 'vw'}`,
-                            top: `${position.y + 'vh'}`,
-                            transform: boatDirection()
+                            width: areaWidth * 5 + 'rem',
+                            height: areaHeight * 5 + 'rem'
+
                         }}
                     >
+                        <div
+                            className='the-boat'
+                            style={{
+                                left: `${position.x + 'vw'}`,
+                                top: `${position.y + 'vh'}`,
+                                transform: boatDirection()
+                            }}
+                        >
+
+                        </div>
+                    </div >
+                    <div className="status-position">
+                        <div className="status-position-style">
+                            <div className="">X =</div>
+                            <div className="">{position.x}</div>
+                        </div>
+                        <div className="status-position-style">
+                            <div className="">Y =</div>
+                            <div className="">{position.y}</div>
+                        </div>
+                        <div className="status-position-style">
+                            <div className="">Direction =</div>
+                            <div className="">{position.direction}</div>
+                        </div>
 
                     </div>
-                </div >
+                </div>
             </div >
         </div>
     );
