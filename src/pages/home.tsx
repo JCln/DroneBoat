@@ -139,7 +139,7 @@ const Home = () => {
         <div>
             <div className="main-wrapper">
                 <h1 className="title">USV Drone Boat Simulator</h1>
-                <div className="position-content grid-19-20">
+                <div className="position-content">
                     <div className="command-section" style={{
                         minWidth: viewWidthSize + 'rem',
                         minHeight: viewHeightSize + 'rem'
