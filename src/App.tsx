@@ -2,7 +2,7 @@ import './app.css';
 import { lazy, useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import { ENRoutes } from './constants/ENRoutes';
-const Home = lazy(() => import('./pages/home'));
+const Base = lazy(() => import('./pages/base-component'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 function App() {
@@ -11,7 +11,7 @@ function App() {
       <BrowserRouter>
         <div className='_app_main'>
           <Routes>
-            <Route path={ENRoutes.Root} element={<Home />}></Route>
+            <Route path={ENRoutes.Root} element={<Base />}></Route>
             <Route path={ENRoutes.NotFound} element={<NotFound />}></Route>
             <Route path='*' element={<NotFound />}></Route>
 

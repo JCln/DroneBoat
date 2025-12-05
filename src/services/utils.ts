@@ -1,4 +1,3 @@
-import { ENNaming } from "../constants/enums";
 
 export class UtilsStatic {
 
