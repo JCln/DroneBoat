@@ -4,23 +4,18 @@ import { ENDirection, ENNaming, TPosition } from "../constants/enums";
 import { toast } from "react-toastify";
 
 const Home = () => {
-    const areaWidth = 4;
-    const areaHeight = 7;
     let gridItems: any[] = [];
-    gridItems = [...Array(areaWidth * areaHeight).keys()];
-    const viewWidthSize = areaWidth;
-    const viewHeightSize = areaHeight;
+    const [viewHeightSize, setViewHeightSize] = useState<number>(6);
+    const [viewWidthSize, setViewWidthSize] = useState<number>(7);
     const [hasDeparted, setHasDeparted] = useState<boolean>(false)
-    const [auxMovement, setAuxMovement] = useState<TPosition>({ x: 0, y: 0, direction: ENDirection.WEST });
     const boatRef = useRef(new USVBoat());
     const [position, setPosition] = useState<TPosition>({ x: 0, y: 0, direction: ENDirection.WEST });
+    const [auxMovement, setAuxMovement] = useState<TPosition>(position);
+
+    gridItems = [...Array(viewWidthSize * viewHeightSize).keys()];
 
     const executeCommand = () => {
-        // console.log('Selected Direction:', position);
-        // const temp = boatRef.current.depart(position);
-        // console.log(temp);        
-        setPosition(auxMovement);
-
+        return auxMovement
     }
     const reset = () => {
         setPosition(prev => {
@@ -92,13 +87,13 @@ const Home = () => {
                 return 'rotate(0deg)'
         }
     }
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-
-        setAuxMovement(prev => ({
-            ...prev,
-            [name]: Number(value)
-        }));
+    const handleAreaWidth = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setViewWidthSize(Number(e.target.value));
+        reset();
+    };
+    const handleAreaHeight = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setViewHeightSize(Number(e.target.value));
+        reset();
     };
     const handleDirectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setAuxMovement(prev => ({
@@ -106,11 +101,16 @@ const Home = () => {
             direction: e.target.value as ENDirection
         }));
     };
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+
+        setAuxMovement(prev => ({
+            ...prev,
+            [name]: Number(value)
+        }));
+    }
     const handleValidation = (fn: any, item?: any) => {
         const nextPosition = fn();
-        console.log(nextPosition);
-        console.log(position);
-
         if (
             !hasDeparted
             && position.x == 0
@@ -135,25 +135,6 @@ const Home = () => {
             toast.error(ENNaming.boatShouldBeInFramework);
         }
     }
-    const handleValidationDepart = (fn: any, item?: any) => {
-        console.log(auxMovement);
-        console.log(position);
-
-        if (!hasDeparted && auxMovement.x == 0 && auxMovement.y == 0 && auxMovement.direction == ENDirection.WEST && item.target.name !== 'depart') {
-            toast.error(ENNaming.boatIsStillInHarbour);
-        }
-        else {
-            if (auxMovement.x > -1 && auxMovement.x - 1 < viewWidthSize &&
-                auxMovement.y > -1 && auxMovement.y - 1 < viewHeightSize
-            ) {
-                setHasDeparted(true);
-                return fn();
-            } else {
-                // inserted values were not true
-                toast.error(ENNaming.boatShouldBeInFramework);
-            }
-        }
-    }
     return (
         <div>
             <div className="main-wrapper">
@@ -164,6 +145,32 @@ const Home = () => {
                         minHeight: viewHeightSize + 'rem'
                     }}>
                         <div className="" style={{ padding: '1rem' }}>
+                            <div className="grid">
+                                <div className="a-command-style">
+                                    <div className="command-depart">
+                                        <div className="input-wrapper">
+                                            <div className="input-label">X</div>
+                                            <input
+                                                className="input-class"
+                                                type="text"
+                                                name="x-grid"
+                                                value={viewWidthSize}
+                                                onChange={handleAreaWidth}
+                                            />
+                                        </div>
+                                        <div className="input-wrapper">
+                                            <div className="input-label">Y</div>
+                                            <input
+                                                className="input-class"
+                                                type="text"
+                                                name="y-grid"
+                                                value={viewHeightSize}
+                                                onChange={handleAreaHeight}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div className="grid gap-8">
                                 <div className="a-command-style">
                                     <div>
@@ -209,7 +216,7 @@ const Home = () => {
                                     <div className="flex gap-4">
                                         <button
                                             name="depart"
-                                            onClick={(item) => handleValidationDepart(executeCommand, item)}
+                                            onClick={(item) => handleValidation(executeCommand, item)}
                                         >
                                             Depart
                                         </button>
