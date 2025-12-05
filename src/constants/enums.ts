@@ -1,7 +1,7 @@
 export enum ENNaming {
     globalErrorUnExpected = 'globalErrorUnExpected',
     globalErrorAsync = 'globalErrorAsync',
-    boatIsStillInHarbour = 'Boat is in harbour!',
+    boatIsStillInHarbour = 'Boat still is in harbour!',
     boatShouldBeInFramework = 'boat should be in the framework!'
 }
 export enum ENDirection {
