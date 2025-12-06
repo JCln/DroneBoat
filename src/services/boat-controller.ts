@@ -60,13 +60,13 @@ export class BoatController {
 
     switch (direction) {
       case ENDirection.NORTH:
-        return { x, y: Math.max(0, y - 1), direction };
+        return { x, y: y - 1, direction };
       case ENDirection.EAST:
-        return { x: Math.min(this.gridWidth - 1, x + 1), y, direction };
+        return { x: x + 1, y, direction };
       case ENDirection.SOUTH:
-        return { x, y: Math.min(this.gridHeight - 1, y + 1), direction };
+        return { x, y: y + 1, direction };
       case ENDirection.WEST:
-        return { x: Math.max(0, x - 1), y, direction };
+        return { x: x - 1, y, direction };
       default:
         return { x, y, direction };
     }
@@ -86,7 +86,7 @@ export class BoatController {
       [ENDirection.SOUTH]: 'rotate(180deg)',
     };
 
-    return rotationMap[direction] || 'rotate(0deg)';
+    return rotationMap[direction];
   }
 
   public isValidPosition(position: TPosition): boolean {
