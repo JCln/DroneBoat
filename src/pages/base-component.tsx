@@ -3,6 +3,7 @@ import { ENDirection, ENNaming, TMovements, TPosition } from "../constants/enums
 import { toast } from "react-toastify";
 import { INITIAL_GRID_SIZE, INITIAL_POSITION } from "../constants/actions";
 import { BoatController } from "../services/boat-controller";
+import AreaSize from "../components/area-size";
 
 const Base = () => {
     let gridItems: any[] = [];
@@ -82,7 +83,7 @@ const Base = () => {
             boatController.setDeparted(true);
             return;
         }
-        
+
         if (!boatController.hasDeparted() && funcName !== 'depart') {
             toast.error(ENNaming.boatIsStillInHarbour);
             return;
@@ -118,32 +119,12 @@ const Base = () => {
                         minHeight: viewHeightSize + 'rem'
                     }}>
                         <div className="" style={{ padding: '1rem' }}>
-                            <div className="grid">
-                                <div className="a-command-style">
-                                    <div className="command-depart">
-                                        <div className="input-wrapper">
-                                            <div className="input-label">X</div>
-                                            <input
-                                                className="input-class"
-                                                type="text"
-                                                name="x-grid"
-                                                value={viewWidthSize}
-                                                onChange={handleAreaWidth}
-                                            />
-                                        </div>
-                                        <div className="input-wrapper">
-                                            <div className="input-label">Y</div>
-                                            <input
-                                                className="input-class"
-                                                type="text"
-                                                name="y-grid"
-                                                value={viewHeightSize}
-                                                onChange={handleAreaHeight}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <AreaSize
+                                handleAreaHeight={handleAreaHeight}
+                                handleAreaWidth={handleAreaWidth}
+                                viewHeightSize={viewHeightSize}
+                                viewWidthSize={viewHeightSize}
+                            />
                             <div className="grid gap-8">
                                 <div className="a-command-style">
                                     <div>
