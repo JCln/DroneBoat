@@ -42,7 +42,7 @@ export class BoatController extends vehicleController {
     return this.forward();
   }
   public backward(): TPosition {
-    return this.backward();
+    return super.backward();
   }
   public reset() {
     const newPosition = super.reset();
