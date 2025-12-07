@@ -15,3 +15,10 @@ export type TPosition = {
     y: number;
     direction: ENDirection;
 }
+export type TMovements =
+    'sail' |
+    'port' |
+    'starBoard' |
+    'depart' |
+    'reset' | 
+    'backward'

@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { ENDirection, ENNaming, TPosition } from "../constants/enums";
+import { ENDirection, ENNaming, TMovements, TPosition } from "../constants/enums";
 import { toast } from "react-toastify";
 import { INITIAL_GRID_SIZE, INITIAL_POSITION } from "../constants/actions";
 import { BoatController } from "../services/boat-controller";
@@ -10,7 +10,6 @@ const Base = () => {
     const [viewWidthSize, setViewWidthSize] = useState<number>(INITIAL_GRID_SIZE);
     const [position, setPosition] = useState<TPosition>(INITIAL_POSITION);
     const [auxMovement, setAuxMovement] = useState<TPosition>(INITIAL_POSITION);
-    const [hasDeparted, setHasDeparted] = useState<boolean>(false);
     gridItems = [...Array(viewWidthSize * viewHeightSize).keys()];
 
     const boatController = useRef(
@@ -20,24 +19,6 @@ const Base = () => {
     const updateGridSize = (width: number, height: number) => {
         boatController.setGridSize(width, height);
     };
-    const executeCommand = () => {
-        return auxMovement;
-    }
-    const reset = () => {
-        const newPosition = boatController.reset();
-        setPosition(newPosition);
-        setHasDeparted(false);
-        boatController.setPosition(newPosition);
-    }
-    const port = () => {
-        return boatController.port();
-    }
-    const starBoard = () => {
-        return boatController.starBoard();
-    }
-    const sail = () => {
-        return boatController.sail();
-    }
     const boatDirection = () => {
         return boatController.getRotationStyle();
     };
@@ -45,47 +26,83 @@ const Base = () => {
         const width = Number(e.target.value);
         setViewWidthSize(width);
         updateGridSize(width, viewHeightSize);
-        reset();
+        boatController.reset();
     };
     const handleAreaHeight = (e: React.ChangeEvent<HTMLInputElement>) => {
         const height = Number(e.target.value);
         setViewHeightSize(height);
         updateGridSize(viewWidthSize, height);
-        reset();
+        boatController.reset();
     };
-    const handleDirectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setAuxMovement(prev => ({
-            ...prev,
-            direction: e.target.value as ENDirection
-        }));
-    };
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+    const handleInputChange = (e: any) => {
         const { name, value } = e.target;
+        console.log(value);
+
         setAuxMovement(prev => ({
             ...prev,
-            [name]: Number(value)
+            [name]: value
         }));
     };
-    const handleValidation = (fn: any, item?: any) => {
-        const nextPosition = fn();
-        if (
-            !hasDeparted &&
-            position.x === 0 &&
-            position.y === 0 &&
-            position.direction === ENDirection.WEST &&
-            item?.target?.name !== 'depart'
-        ) {
+    const handleClicked = (funcName: TMovements, item?: any): any => {
+        let nextPosition: TPosition;
+
+        switch (funcName) {
+            case 'port':
+                nextPosition = boatController.port();
+                break
+            case 'starBoard':
+                nextPosition = boatController.starBoard();
+                break
+            case 'sail':
+                nextPosition = boatController.sail();
+                break
+            case 'backward':
+                nextPosition = boatController.backward();
+                break
+            case 'depart':
+                nextPosition = boatController.depart(auxMovement);
+                break
+            case 'reset':
+                nextPosition = boatController.reset();
+                setPosition(nextPosition);
+                setAuxMovement(INITIAL_POSITION);
+                break;
+            default:
+                return position;
+        }
+        return nextPosition;
+    }
+    const handleValidation = (funcName: any, item?: any) => {
+        const nextPosition = handleClicked(funcName);
+
+        if (funcName === 'reset') {
+            const newPosition = handleClicked('reset');
+            setPosition(newPosition);
+            boatController.setDeparted(true);
+            return;
+        }
+        
+        if (!boatController.hasDeparted() && funcName !== 'depart') {
             toast.error(ENNaming.boatIsStillInHarbour);
             return;
         }
-        if (item?.target?.name === 'port' || item?.target?.name === 'starBoard') {
-            setPosition(nextPosition);
-            boatController.setPosition(nextPosition);
+        if (funcName === 'port' || funcName === 'starBoard') {
+            if (boatController.isValidPosition(nextPosition)) {
+                boatController.setPosition(nextPosition);
+                setPosition(nextPosition);
+            }
+            return;
         }
+
         if (boatController.isValidPosition(nextPosition)) {
-            setHasDeparted(true);
-            setPosition(nextPosition);
             boatController.setPosition(nextPosition);
+            setPosition(nextPosition);
+
+            if (funcName === 'depart') {
+                boatController.setDeparted(true);
+            }
+
         } else {
             toast.error(ENNaming.boatShouldBeInFramework);
         }
@@ -160,7 +177,7 @@ const Base = () => {
                                                 name="direction"
                                                 id="direction"
                                                 value={auxMovement.direction}
-                                                onChange={handleDirectionChange}
+                                                onChange={handleInputChange}
                                             >
                                                 <option value={ENDirection.NORTH}>{ENDirection.NORTH}</option>
                                                 <option value={ENDirection.WEST}>{ENDirection.WEST}</option>
@@ -172,14 +189,14 @@ const Base = () => {
                                     <div className="flex gap-4">
                                         <button
                                             name="depart"
-                                            onClick={(item) => handleValidation(executeCommand, item)}
+                                            onClick={(item) => handleValidation('depart', item)}
                                         >
                                             Depart
                                         </button>
                                         <button
                                             className="reset-button"
                                             name="reset"
-                                            onClick={reset}
+                                            onClick={(item) => handleValidation('reset', item)}
                                         >
                                             Reset
                                         </button>
@@ -191,9 +208,15 @@ const Base = () => {
                                     </div>
                                     <button
                                         name="sail"
-                                        onClick={(item) => handleValidation(sail, item)}
+                                        onClick={(item) => handleValidation('sail', item)}
                                     >
                                         Sail
+                                    </button>
+                                    <button
+                                        name="backward"
+                                        onClick={(item) => handleValidation('backward', item)}
+                                    >
+                                        backward
                                     </button>
                                 </div>
                                 <div className="a-command-style">
@@ -202,7 +225,7 @@ const Base = () => {
                                     </div>
                                     <button
                                         name='port'
-                                        onClick={(item) => handleValidation(port, item)}
+                                        onClick={(item) => handleValidation('port', item)}
                                     >
                                         Port
                                     </button>
@@ -213,7 +236,7 @@ const Base = () => {
                                     </div>
                                     <button
                                         name="starBoard"
-                                        onClick={(item) => handleValidation(starBoard, item)}
+                                        onClick={(item) => handleValidation('starBoard', item)}
                                     >
                                         StarBoard
                                     </button>

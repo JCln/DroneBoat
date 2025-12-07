@@ -1,19 +1,15 @@
-import { INITIAL_POSITION } from "../constants/actions";
 import { ENDirection, TPosition } from "../constants/enums";
+import { vehicleController } from "./vehicle-controller";
 
-export class BoatController {
-  private position: TPosition;
-  private gridWidth: number;
-  private gridHeight: number;
+export class BoatController extends vehicleController {
+  private departed: boolean = false;
 
   constructor(
     initialPosition: TPosition,
     gridWidth: number,
     gridHeight: number
   ) {
-    this.position = { ...initialPosition };
-    this.gridWidth = gridWidth;
-    this.gridHeight = gridHeight;
+    super(initialPosition, gridWidth, gridHeight);
   }
 
   public getPosition(): TPosition {
@@ -30,52 +26,29 @@ export class BoatController {
   }
 
   public port(): TPosition {
-    const { x, y, direction } = this.position;
-
-    const directionMap = {
-      [ENDirection.NORTH]: ENDirection.WEST,
-      [ENDirection.WEST]: ENDirection.SOUTH,
-      [ENDirection.SOUTH]: ENDirection.EAST,
-      [ENDirection.EAST]: ENDirection.NORTH,
-    };
-
-    return { x, y, direction: directionMap[direction] };
+    return this.rotateLeft();
+  }
+  public depart(position: TPosition): TPosition {
+    this.position = { ...position };
+    this.departed = true;
+    return this.getPosition();
   }
 
   public starBoard(): TPosition {
-    const { x, y, direction } = this.position;
-
-    const directionMap = {
-      [ENDirection.WEST]: ENDirection.NORTH,
-      [ENDirection.NORTH]: ENDirection.EAST,
-      [ENDirection.EAST]: ENDirection.SOUTH,
-      [ENDirection.SOUTH]: ENDirection.WEST,
-    };
-
-    return { x, y, direction: directionMap[direction] };
+    return this.rotateRight();
   }
 
   public sail(): TPosition {
-    const { x, y, direction } = this.position;
-
-    switch (direction) {
-      case ENDirection.NORTH:
-        return { x, y: y - 1, direction };
-      case ENDirection.EAST:
-        return { x: x + 1, y, direction };
-      case ENDirection.SOUTH:
-        return { x, y: y + 1, direction };
-      case ENDirection.WEST:
-        return { x: x - 1, y, direction };
-      default:
-        return { x, y, direction };
-    }
+    return this.forward();
   }
-
-  public reset(): TPosition {
-    return INITIAL_POSITION;
+  public backward(): TPosition {
+    return this.backward();
   }
-
+  public reset() {
+    const newPosition = super.reset();
+    this.setPosition(newPosition);
+    return newPosition;
+  }
   public getRotationStyle(): string {
     const { direction } = this.position;
 
@@ -97,4 +70,12 @@ export class BoatController {
       position.y < this.gridHeight
     );
   }
+  public hasDeparted(): boolean {
+    return this.departed;
+  }
+
+  public setDeparted(v: boolean) {
+    this.departed = v;
+  }
+
 }
