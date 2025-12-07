@@ -3,7 +3,10 @@ import { ENDirection, ENNaming, TMovements, TPosition } from "../constants/enums
 import { toast } from "react-toastify";
 import { INITIAL_GRID_SIZE, INITIAL_POSITION } from "../constants/actions";
 import { BoatController } from "../services/boat-controller";
-import AreaSize from "../components/area-size";
+import CommandWindow from "../components/command-window";
+import ActionView from "../components/action-view";
+import ActionButton from "../components/action-button";
+import ControlAreaSize from "../components/control-area-size";
 
 const Base = () => {
     let gridItems: any[] = [];
@@ -119,109 +122,24 @@ const Base = () => {
                         minHeight: viewHeightSize + 'rem'
                     }}>
                         <div className="" style={{ padding: '1rem' }}>
-                            <AreaSize
+                            <ControlAreaSize
                                 handleAreaHeight={handleAreaHeight}
                                 handleAreaWidth={handleAreaWidth}
                                 viewHeightSize={viewHeightSize}
-                                viewWidthSize={viewHeightSize}
+                                viewWidthSize={viewWidthSize}
                             />
                             <div className="grid gap-8">
-                                <div className="a-command-style">
-                                    <div>
-                                        <p>Depart from the harbour and move to as position.</p>
-                                    </div>
-                                    <div className="command-depart">
-                                        <div className="input-wrapper">
-                                            <div className="input-label">X</div>
-                                            <input
-                                                className="input-class"
-                                                type="text"
-                                                name="x"
-                                                value={auxMovement.x}
-                                                onChange={handleInputChange}
-                                            />
-                                        </div>
-                                        <div className="input-wrapper">
-                                            <div className="input-label">Y</div>
-                                            <input
-                                                className="input-class"
-                                                type="text"
-                                                name="y"
-                                                value={auxMovement.y}
-                                                onChange={handleInputChange}
-                                            />
-                                        </div>
-                                        <div className="input-wrapper">
-                                            <div className="input-label">Direction</div>
-                                            <select
-                                                className="input-class"
-                                                name="direction"
-                                                id="direction"
-                                                value={auxMovement.direction}
-                                                onChange={handleInputChange}
-                                            >
-                                                <option value={ENDirection.NORTH}>{ENDirection.NORTH}</option>
-                                                <option value={ENDirection.WEST}>{ENDirection.WEST}</option>
-                                                <option value={ENDirection.SOUTH}>{ENDirection.SOUTH}</option>
-                                                <option value={ENDirection.EAST}>{ENDirection.EAST}</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div className="flex gap-4">
-                                        <button
-                                            name="depart"
-                                            onClick={(item) => handleValidation('depart', item)}
-                                        >
-                                            Depart
-                                        </button>
-                                        <button
-                                            className="reset-button"
-                                            name="reset"
-                                            onClick={(item) => handleValidation('reset', item)}
-                                        >
-                                            Reset
-                                        </button>
-                                    </div>
-                                </div>
-                                <div className="a-command-style">
-                                    <div>
-                                        <p>Move the boat one meter forward.</p>
-                                    </div>
-                                    <button
-                                        name="sail"
-                                        onClick={(item) => handleValidation('sail', item)}
-                                    >
-                                        Sail
-                                    </button>
-                                    <button
-                                        name="backward"
-                                        onClick={(item) => handleValidation('backward', item)}
-                                    >
-                                        backward
-                                    </button>
-                                </div>
-                                <div className="a-command-style">
-                                    <div>
-                                        <p>Rotate the boat 90 degrees to the <strong> Left</strong>.</p>
-                                    </div>
-                                    <button
-                                        name='port'
-                                        onClick={(item) => handleValidation('port', item)}
-                                    >
-                                        Port
-                                    </button>
-                                </div>
-                                <div className="a-command-style">
-                                    <div>
-                                        <p>Rotate the boat 90 degrees to the <strong> Right</strong>.</p>
-                                    </div>
-                                    <button
-                                        name="starBoard"
-                                        onClick={(item) => handleValidation('starBoard', item)}
-                                    >
-                                        StarBoard
-                                    </button>
-                                </div>
+                                {/*  */}
+                                <CommandWindow
+                                    auxMovement={auxMovement}
+                                    handleInputChange={handleInputChange}
+                                    handleValidation={handleValidation}
+                                />
+                                {/*  */}
+                                <ActionButton
+                                    handleValidation={handleValidation}
+                                />
+
                                 {/* <div className="a-command-style">
                                 <div>
                                     <p>Move the boat one meter forward</p>
@@ -235,69 +153,14 @@ const Base = () => {
                             </div>
                         </div >
                     </div >
-                    <div>
-                        <div className="grid justify-center">
-                            <div
-                                className="area-box"
-                                style={{
-                                    width: viewWidthSize + 'rem',
-                                    height: viewHeightSize + 'rem'
-
-                                }}
-                            >
-                                <div
-                                    className='the-boat'
-                                    style={{
-                                        left: `${position.x + 'rem'}`,
-                                        top: `${position.y + 'rem'}`,
-                                        transform: boatDirection()
-                                    }}
-                                >
-
-                                </div>
-                            </div >
-                            <div
-                                className="area-box"
-                                style={{
-                                    width: viewWidthSize + 'rem',
-                                    height: viewHeightSize + 'rem'
-
-                                }}
-                            >
-                                <div className="grid-system">
-                                    {
-                                        gridItems.map((item, index) => (
-                                            <div key={item + index} className="div"></div>
-                                        ))
-                                    }
-                                    <div
-                                        className='the-boat'
-                                        style={{
-                                            left: `${position.x + 'rem'}`,
-                                            top: `${position.y + 'rem'}`,
-                                            background: 'var(--color-4)',
-                                            transform: boatDirection()
-                                        }}
-                                    >
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="status-position">
-                            <div className="status-position-style">
-                                <div className="">X =</div>
-                                <div className="">{position.x}</div>
-                            </div>
-                            <div className="status-position-style">
-                                <div className="">Y =</div>
-                                <div className="">{position.y}</div>
-                            </div>
-                            <div className="status-position-style">
-                                <div className="">D =</div>
-                                <div className="">{position.direction}</div>
-                            </div>
-                        </div>
-                    </div>
+                    {/*  */}
+                    <ActionView
+                        boatDirection={boatDirection}
+                        gridItems={gridItems}
+                        position={position}
+                        viewHeightSize={viewHeightSize}
+                        viewWidthSize={viewWidthSize}
+                    />
                 </div>
             </div>
         </div >

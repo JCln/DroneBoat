@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function AreaSize(
+export default function ControlAreaSize(
     { viewWidthSize,
         handleAreaWidth,
         viewHeightSize,
@@ -14,8 +14,10 @@ export default function AreaSize(
                         <div className="input-label">X</div>
                         <input
                             className="input-class"
-                            type="text"
                             name="x-grid"
+                            type="number"
+                            min="1"
+                            max="40"
                             value={viewWidthSize}
                             onChange={handleAreaWidth}
                         />
@@ -24,7 +26,9 @@ export default function AreaSize(
                         <div className="input-label">Y</div>
                         <input
                             className="input-class"
-                            type="text"
+                            type="number"
+                            min="1"
+                            max="40"
                             name="y-grid"
                             value={viewHeightSize}
                             onChange={handleAreaHeight}
