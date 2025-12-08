@@ -24,12 +24,12 @@ export abstract class AbstractVehicle {
 
     public returnBack() { };
     public reset(): TPosition { return INITIAL_POSITION }
-    protected isValidMove(newPosition: TPosition): boolean {
+    protected isValidMove(nextPosition: TPosition): boolean {
         return (
-            newPosition.x >= 0 &&
-            newPosition.x < this.gridWidth &&
-            newPosition.y >= 0 &&
-            newPosition.y < this.gridHeight
+            nextPosition.x >= 0 &&
+            nextPosition.x < this.gridWidth &&
+            nextPosition.y >= 0 &&
+            nextPosition.y < this.gridHeight
         );
     }
 }

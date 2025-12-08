@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import { ENDirection, ENNaming, TMovements, TPosition } from "../constants/enums";
-import { toast } from "react-toastify";
 import { INITIAL_GRID_SIZE, INITIAL_POSITION } from "../constants/actions";
 import { BoatController } from "../services/boat-controller";
 import CommandWindow from "../components/command-window";
@@ -10,32 +9,16 @@ import ControlAreaSize from "../components/control-area-size";
 
 const Base = () => {
     let gridItems: any[] = [];
-    const [viewHeightSize, setViewHeightSize] = useState<number>(INITIAL_GRID_SIZE);
-    const [viewWidthSize, setViewWidthSize] = useState<number>(INITIAL_GRID_SIZE);
     const [position, setPosition] = useState<TPosition>(INITIAL_POSITION);
     const [auxMovement, setAuxMovement] = useState<TPosition>(INITIAL_POSITION);
+    const [viewHeightSize, setViewHeightSize] = useState<number>(INITIAL_GRID_SIZE);
+    const [viewWidthSize, setViewWidthSize] = useState<number>(INITIAL_GRID_SIZE);
     gridItems = [...Array(viewWidthSize * viewHeightSize).keys()];
 
     const boatController = useRef(
         new BoatController(position, viewWidthSize, viewHeightSize)
     ).current;
 
-    const updateGridSize = (width: number, height: number) => {
-        boatController.setGridSize(width, height);
-    };
-   
-    const handleAreaWidth = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const width = Number(e.target.value);
-        setViewWidthSize(width);
-        updateGridSize(width, viewHeightSize);
-        boatController.reset();
-    };
-    const handleAreaHeight = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const height = Number(e.target.value);
-        setViewHeightSize(height);
-        updateGridSize(viewWidthSize, height);
-        boatController.reset();
-    };
 
     const handleInputChange = (e: any) => {
         const { name, value } = e.target;
@@ -74,10 +57,11 @@ const Base = () => {
                     }}>
                         <div className="" style={{ padding: '1rem' }}>
                             <ControlAreaSize
-                                handleAreaHeight={handleAreaHeight}
-                                handleAreaWidth={handleAreaWidth}
+                                boatController={boatController}
                                 viewHeightSize={viewHeightSize}
                                 viewWidthSize={viewWidthSize}
+                                setViewHeightSize={setViewHeightSize}
+                                setViewWidthSize={setViewWidthSize}
                             />
                             <div className="grid gap-8">
                                 {/*  */}

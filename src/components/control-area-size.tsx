@@ -1,11 +1,30 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 export default function ControlAreaSize(
-    { viewWidthSize,
-        handleAreaWidth,
+    {
+        boatController,
         viewHeightSize,
-        handleAreaHeight }
+        viewWidthSize,
+        setViewHeightSize,
+        setViewWidthSize
+    }
 ) {
+
+    const updateGridSize = (width: number, height: number) => {
+        boatController.setGridSize(width, height);
+        boatController.reset();
+    };
+
+    const handleAreaHeight = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const height = Number(e.target.value);
+        setViewHeightSize(height);
+        updateGridSize(viewWidthSize, height);
+    };
+    const handleAreaWidth = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const width = Number(e.target.value);
+        setViewWidthSize(width);
+        updateGridSize(width, viewHeightSize);        
+    };
     return (
         <div className="grid">
             <div className="a-command-style">

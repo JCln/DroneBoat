@@ -17,8 +17,8 @@ export class vehicleController extends AbstractVehicle {
         this.gridHeight = gridHeight;
     }
     moveTo(position: TPosition): TPosition {
-        const newPosition = position;
-        return newPosition;
+        const nextPosition = position;
+        return nextPosition;
     }
     rotateRight(): TPosition {
         const { x, y, direction } = this.position;
