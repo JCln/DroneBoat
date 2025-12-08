@@ -77,38 +77,25 @@ const Base = () => {
         }
         return nextPosition;
     }
-    const handleValidation = (funcName: any, item?: any) => {
+    const handleValidation = (funcName: TMovements, item?: any) => {
         const nextPosition = handleClicked(funcName);
-
-        if (funcName === 'reset') {
-            const newPosition = handleClicked('reset');
-            setPosition(newPosition);
-            boatController.setDeparted(true);
+        if (funcName == 'reset') {
             return;
         }
-
         if (!boatController.hasDeparted() && funcName !== 'depart') {
             toast.error(ENNaming.boatIsStillInHarbour);
             return;
         }
-        if (funcName === 'port' || funcName === 'starBoard') {
-            if (boatController.isValidPosition(nextPosition)) {
-                boatController.setPosition(nextPosition);
-                setPosition(nextPosition);
-            }
+        if (!boatController.isValidPosition(nextPosition)) {
+            toast.error(ENNaming.boatShouldBeInFramework);
             return;
         }
 
-        if (boatController.isValidPosition(nextPosition)) {
-            boatController.setPosition(nextPosition);
-            setPosition(nextPosition);
+        boatController.setPosition(nextPosition);
+        setPosition(nextPosition);
 
-            if (funcName === 'depart') {
-                boatController.setDeparted(true);
-            }
-
-        } else {
-            toast.error(ENNaming.boatShouldBeInFramework);
+        if (funcName === 'depart') {
+            boatController.setDeparted(true);
         }
     };
 

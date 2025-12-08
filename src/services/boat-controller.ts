@@ -47,8 +47,10 @@ export class BoatController extends vehicleController {
   public reset() {
     const newPosition = super.reset();
     this.setPosition(newPosition);
+    this.setDeparted(false);
     return newPosition;
   }
+
   public getRotationStyle(): string {
     const { direction } = this.position;
 
