@@ -66,12 +66,7 @@ export class BoatController extends vehicleController {
   }
 
   public isValidPosition(position: TPosition): boolean {
-    return (
-      position.x >= 0 &&
-      position.x < this.gridWidth &&
-      position.y >= 0 &&
-      position.y < this.gridHeight
-    );
+    return super.isValidMove(position);
   }
   public movementValidation = (funcName: TMovements, nextPosition: TPosition): boolean => {
     if (funcName == 'reset') {

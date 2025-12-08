@@ -1,7 +1,8 @@
+import { TPosition } from './../constants/enums';
 import { INITIAL_POSITION } from '../constants/actions';
-import { TPosition } from '../constants/enums';
+import { IVehicle } from '../constants/interface';
 
-export abstract class AbstractVehicle {
+export abstract class AbstractVehicle implements IVehicle {
     protected position: TPosition;
     protected gridWidth: number;
     protected gridHeight: number;

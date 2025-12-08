@@ -1,4 +1,3 @@
-import { INITIAL_POSITION } from "../constants/actions";
 import { ENDirection, TPosition } from "../constants/enums";
 import { AbstractVehicle } from "./abstract-vehicle";
 
