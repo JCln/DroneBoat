@@ -1,4 +1,5 @@
-import { ENDirection, TPosition } from "../constants/enums";
+import { toast } from "react-toastify";
+import { ENDirection, ENNaming, TMovements, TPosition } from "../constants/enums";
 import { vehicleController } from "./vehicle-controller";
 
 export class BoatController extends vehicleController {
@@ -71,6 +72,36 @@ export class BoatController extends vehicleController {
       position.y >= 0 &&
       position.y < this.gridHeight
     );
+  }
+  public movementValidation = (funcName: TMovements, nextPosition: TPosition): boolean => {
+    if (funcName == 'reset') {
+      return false;
+    }
+    if (!this.hasDeparted() && funcName !== 'depart') {
+      toast.error(ENNaming.boatIsStillInHarbour);
+      return false;
+    }
+    if (!this.isValidPosition(nextPosition)) {
+      toast.error(ENNaming.boatShouldBeInFramework);
+      return false;
+    }
+    return true;
+  }
+  public handleClicked = (funcName: TMovements, auxMovement: any): any => {
+    switch (funcName) {
+      case 'depart':
+        return this.depart(auxMovement);
+      case 'port':
+        return this.port();
+      case 'starBoard':
+        return this.starBoard();
+      case 'sail':
+        return this.sail();
+      case 'backward':
+        return this.backward();
+      case 'reset':
+        return this.reset();
+    }
   }
   public hasDeparted(): boolean {
     return this.departed;

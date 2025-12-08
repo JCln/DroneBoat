@@ -23,9 +23,7 @@ const Base = () => {
     const updateGridSize = (width: number, height: number) => {
         boatController.setGridSize(width, height);
     };
-    const boatDirection = () => {
-        return boatController.getRotationStyle();
-    };
+   
     const handleAreaWidth = (e: React.ChangeEvent<HTMLInputElement>) => {
         const width = Number(e.target.value);
         setViewWidthSize(width);
@@ -41,56 +39,22 @@ const Base = () => {
 
     const handleInputChange = (e: any) => {
         const { name, value } = e.target;
-        console.log(value);
-
         setAuxMovement(prev => ({
             ...prev,
             [name]: value
         }));
     };
-    const handleClicked = (funcName: TMovements, item?: any): any => {
-        let nextPosition: TPosition;
 
-        switch (funcName) {
-            case 'port':
-                nextPosition = boatController.port();
-                break
-            case 'starBoard':
-                nextPosition = boatController.starBoard();
-                break
-            case 'sail':
-                nextPosition = boatController.sail();
-                break
-            case 'backward':
-                nextPosition = boatController.backward();
-                break
-            case 'depart':
-                nextPosition = boatController.depart(auxMovement);
-                break
-            case 'reset':
-                nextPosition = boatController.reset();
-                setPosition(nextPosition);
-                setAuxMovement(INITIAL_POSITION);
-                break;
-            default:
-                return position;
-        }
-        return nextPosition;
-    }
-    const handleValidation = (funcName: TMovements, item?: any) => {
-        const nextPosition = handleClicked(funcName);
+    const handleAction = (funcName: TMovements) => {
+        const nextPosition = boatController.handleClicked(funcName, auxMovement);
         if (funcName == 'reset') {
+            setPosition(nextPosition);
+            setAuxMovement(INITIAL_POSITION);
             return;
         }
-        if (!boatController.hasDeparted() && funcName !== 'depart') {
-            toast.error(ENNaming.boatIsStillInHarbour);
+        if (!boatController.movementValidation(funcName, nextPosition)) {
             return;
         }
-        if (!boatController.isValidPosition(nextPosition)) {
-            toast.error(ENNaming.boatShouldBeInFramework);
-            return;
-        }
-
         boatController.setPosition(nextPosition);
         setPosition(nextPosition);
 
@@ -120,11 +84,11 @@ const Base = () => {
                                 <CommandWindow
                                     auxMovement={auxMovement}
                                     handleInputChange={handleInputChange}
-                                    handleValidation={handleValidation}
+                                    handleValidation={handleAction}
                                 />
                                 {/*  */}
                                 <ActionButton
-                                    handleValidation={handleValidation}
+                                    handleValidation={handleAction}
                                 />
 
                                 {/* <div className="a-command-style">
@@ -142,7 +106,7 @@ const Base = () => {
                     </div >
                     {/*  */}
                     <ActionView
-                        boatDirection={boatDirection}
+                        boatController={boatController}
                         gridItems={gridItems}
                         position={position}
                         viewHeightSize={viewHeightSize}

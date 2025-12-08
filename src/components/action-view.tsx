@@ -2,13 +2,16 @@ import React from 'react'
 
 export default function ActionView(
     {
+        boatController,
         position,
-        boatDirection,
         viewWidthSize,
         viewHeightSize,
         gridItems,
     }
 ) {
+    const boatDirection = () => {
+        return boatController.getRotationStyle();
+    };
     return (
         <div>
             <div className="grid justify-center">
